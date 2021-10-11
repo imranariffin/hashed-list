@@ -33,12 +33,17 @@ class HashedList(List[T]):
         HashedList will make the work easy for you.
     """
 
+    __slots__ = ("_index",)
+
+    _index: Dict[T, int]
+
     def __init__(self, iterable: Iterable[T]):
-        super().__init__(iterable)
-        self._index: Dic[T, int] = {}
+        self._index = {}
         for i, v in enumerate(iterable):
-            self._validate_value(v)
+            if v in self._index:
+                raise DuplicateValueError(f"Duplicate values in HashedList")
             self._index[v] = i
+        super().__init__(iterable)
 
     def __setitem__(self, key: Union[SupportsIndex, slice], value: Union[T, Iterable[T]]) -> None:
         new_values: Tuple[T] = tuple(value) if isinstance(value, Iterable) else (value,)

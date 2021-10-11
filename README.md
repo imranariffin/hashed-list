@@ -65,33 +65,36 @@ than `list.index()` but you can try it yourself by copy-pasting the code below o
 your Python shell
 
 ```python
-import time
 from random import randint
+import time
+
 from hashed_list import HashedList
 
-list_size = 99_999_999
-random_value = randint(list_size // 2, list_size)
+list_size = 999_999
+random_values = [randint(list_size // 2, list_size) for _ in range(1000)]
 
 print("Testing list.index()")
-very_huge_list = list(range(list_size))
 t0 = time.time()
-_ = very_huge_list.index(random_value)
+very_huge_list = list(range(list_size))
+[very_huge_list.index(random_value) for random_value in random_values]
 d1 = time.time() - t0
 del very_huge_list  # Clear up unused memory
-print(f"list.index({random_value}) took {d1} seconds")
-# => list.index took 0.0004763603210449219 seconds
+print(f"list.index() took {d1} seconds for {len(random_values)} calls")
+# => list.index took 7.381884813308716 seconds for 1000 calls
 
 print("Testing HashedList.index()")
-very_huge_hashed_list = HashedList(range(list_size))
 t0 = time.time()
-_ = very_huge_hashed_list.index()
+very_huge_hashed_list = HashedList(range(list_size))
+# _ = very_huge_hashed_list.index(random_value)
+[very_huge_hashed_list.index(random_value) for random_value in random_values]
 d2 = time.time() - t0
 del very_huge_hashed_list  # Clear up unused memory
-print(f"HashList.index({random_value}) took {d2} seconds")
-# HashList.index took 0.0004763603210449219 seconds
+print(f"HashList.index() took {d2} seconds for {len(random_values)} calls")
+# HashList.index took 0.17798161506652832 seconds for 1000 calls
 
 # Result
 print(f"HashList.index() is {d1 // d2} times faster than list.index()!")
+# => HashList.index() is 41.0 times faster than list.index()!
 ```
 
 ## Caveats
