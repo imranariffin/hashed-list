@@ -69,22 +69,29 @@ import time
 from random import randint
 from hashed_list import HashedList
 
-list_size = 99999999
+list_size = 99_999_999
+random_value = randint(list_size // 2, list_size)
 
 print("Testing list.index()")
 very_huge_list = list(range(list_size))
 t0 = time.time()
-_ = very_huge_list.index(randint(0, list_size))
+_ = very_huge_list.index(random_value)
 d1 = time.time() - t0
-print(f"list.index took {d1} seconds")  # list.index took 0.0004763603210449219 seconds
+del very_huge_list  # Clear up unused memory
+print(f"list.index({random_value}) took {d1} seconds")
+# => list.index took 0.0004763603210449219 seconds
 
 print("Testing HashedList.index()")
 very_huge_hashed_list = HashedList(range(list_size))
 t0 = time.time()
-_ = very_huge_hashed_list.index(randint(0, list_size))
+_ = very_huge_hashed_list.index()
 d2 = time.time() - t0
-print(f"HashList.index took {d2} seconds")  # HashList.index took 0.0004763603210449219 seconds
-print(f"HashList.index is {d1 // d2} times faster than list.index!")
+del very_huge_hashed_list  # Clear up unused memory
+print(f"HashList.index({random_value}) took {d2} seconds")
+# HashList.index took 0.0004763603210449219 seconds
+
+# Result
+print(f"HashList.index() is {d1 // d2} times faster than list.index()!")
 ```
 
 ## Caveats

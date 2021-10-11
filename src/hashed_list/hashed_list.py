@@ -1,4 +1,3 @@
-from collections import Counter
 from typing import Dict, Optional, SupportsIndex, Iterable, List, Tuple, TypeVar, Union
 
 T = TypeVar("T")
@@ -36,8 +35,10 @@ class HashedList(List[T]):
 
     def __init__(self, iterable: Iterable[T]):
         super().__init__(iterable)
-        self._validate(self)
-        self._index: Dict[T, int] = {v: i for i, v in enumerate(iterable)}
+        self._index: Dic[T, int] = {}
+        for i, v in enumerate(iterable):
+            self._validate_value(v)
+            self._index[v] = i
 
     def __setitem__(self, key: Union[SupportsIndex, slice], value: Union[T, Iterable[T]]) -> None:
         new_values: Tuple[T] = tuple(value) if isinstance(value, Iterable) else (value,)
@@ -64,8 +65,8 @@ class HashedList(List[T]):
     def extend(self, iterable: Iterable[T]) -> None:
         old_length = len(self)
         super().extend(iterable)
-        self._validate(self)
         for i, v in enumerate(iterable):
+            self._validate_value(v)
             self._index[v] = old_length + i
 
     def insert(self, index: int, value: T) -> None:
@@ -110,11 +111,4 @@ class HashedList(List[T]):
 
     def _validate_value(self, value: T) -> None:
         if value in self._index:
-            raise DuplicateValueError(f"Duplicate values in HashedList")
-
-    @staticmethod
-    def _validate(iterables: Iterable[T]):
-        counts = Counter(iterables)
-        duplicate_values = {k: v for k, v in counts.items() if v > 1}
-        if duplicate_values:
             raise DuplicateValueError(f"Duplicate values in HashedList")
