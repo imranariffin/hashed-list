@@ -6,23 +6,22 @@ A List with O(1) time complexity for `.index()` method, instead of O(N).
 
 ## Description
 
-A data structure that is pretty much a Python list, except that:
+`HashedList` is a data structure that is pretty much a Python list, except that:
 1. The method `.index(value)` is O(1) (Good)
-2. The data structure uses twice more memory due to indexing
-   (Not good but still okay)
-3. Items must be unique. It will raise DuplicateValueError if
+2. It uses twice more memory due to indexing (Not good but still okay)
+3. It takes more time than list during initialization due to hashing of each item
+4. Items must be unique. It will raise `DuplicateValueError` if
    duplicate item is provided
 
 ### Main use case:
-You have a huge list of unique items that:
+You have a huge list of unique, ordered items that:
 1. You may update the list (remove, insert, set value etc) from
    time to time
-2. You may get the index of a specific item in the list from
-   time to time
+2. You may get the index of a specific item in the list very often
 
 In this case, using just a regular list definitely works but will cost
 you O(N) each time you get the index of a specific item. Or, you can
-maintain along the list a dictionary of item => index ,but that will cost
+maintain along the list a dictionary of item => index, but that will cost
 you the burden of updating the dictionary everytime the list is updated.
 
 HashedList will make the work easy for you.
@@ -60,7 +59,7 @@ hashed_list_1.index("c")  # => 2
 ```
 
 ## Simple benchmark
-On a large list, `HashedList.index()` should be more than a thousand times faster 
+On a large list, `HashedList.index()` should be tens of times faster 
 than `list.index()` but you can try it yourself by copy-pasting the code below on 
 your Python shell
 
