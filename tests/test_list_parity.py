@@ -238,7 +238,7 @@ class TestListParity(unittest.TestCase):
 
     def test_reverse(self):
         ls = ["b", "c", "1"]
-        harray = ["b", "c", "1"]
+        harray = HashedList(["b", "c", "1"])
 
         ls.reverse()
         harray.reverse()
@@ -247,3 +247,12 @@ class TestListParity(unittest.TestCase):
         self.assertEqual(ls.index("1"), harray.index("1"))
         self.assertEqual(ls.index("b"), harray.index("b"))
         self.assertEqual(ls.index("c"), harray.index("c"))
+
+    def test_contains(self):
+        ls = [1, 2, 3]
+        harray = HashedList([1, 2, 3])
+
+        self.assertEqual(1 in ls, 1 in harray)
+        self.assertEqual(2 in ls, 2 in harray)
+        self.assertEqual(3 in ls, 3 in harray)
+        self.assertEqual(999 in ls, 999 in harray)
