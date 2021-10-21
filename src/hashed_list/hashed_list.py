@@ -38,11 +38,7 @@ class HashedList(List[T]):
     _index: Dict[T, int]
 
     def __init__(self, iterable: Iterable[T]):
-        self._index = {}
-        for i, v in enumerate(iterable):
-            if v in self._index:
-                raise DuplicateValueError(f"Duplicate values in HashedList")
-            self._index[v] = i
+        self._create_index(iterable=iterable)
         super().__init__(iterable)
 
     def __setitem__(self, key: Union[SupportsIndex, slice], value: Union[T, Iterable[T]]) -> None:
@@ -61,6 +57,9 @@ class HashedList(List[T]):
             new_key_values = zip(range(key.start, key.stop), value)
         for new_index, new_value in new_key_values:
             self._index[new_value] = int(new_index)
+
+    def __contains__(self, item: T):
+        return item in self._index
 
     def append(self, value: T) -> None:
         self._validate_value(value)
@@ -114,6 +113,17 @@ class HashedList(List[T]):
 
         return index
 
+    def reverse(self) -> None:
+        super().reverse()
+        self._create_index(self)
+
     def _validate_value(self, value: T) -> None:
         if value in self._index:
             raise DuplicateValueError(f"Duplicate values in HashedList")
+
+    def _create_index(self, iterable: Iterable[T]) -> None:
+        self._index = {}
+        for i, v in enumerate(iterable):
+            if v in self._index:
+                raise DuplicateValueError(f"Duplicate values in HashedList")
+            self._index[v] = i
