@@ -1,4 +1,4 @@
-from typing import Dict, Optional, SupportsIndex, Iterable, List, Tuple, TypeVar, Union
+from typing import Callable, Dict, Optional, SupportsIndex, Iterable, List, Tuple, TypeVar, Union
 
 T = TypeVar("T")
 
@@ -116,6 +116,10 @@ class HashedList(List[T]):
     def reverse(self) -> None:
         super().reverse()
         self._create_index(self)
+
+    def sort(self, *, key: Optional[Callable] = None, reverse: bool = False) -> None:
+        super().sort(key=key, reverse=reverse)
+        self._create_index(iterable=self)
 
     def _validate_value(self, value: T) -> None:
         if value in self._index:
