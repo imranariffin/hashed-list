@@ -226,7 +226,7 @@ class TestListParity(unittest.TestCase):
 
     def test_sort(self):
         ls = ["c", "b", "1"]
-        harray = ["c", "b", "1"]
+        harray = HashedList(ls)
 
         ls.sort()
         harray.sort()
